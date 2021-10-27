@@ -14,4 +14,4 @@ if __name__ == '__main__':
     dataset = WeiBoDataset(data_path)
     dataloader = DataLoader(dataset, batch_size=64, num_workers=3)
     for i, batch in enumerate(dataloader):
-        print(batch[1].size())
+        print(i, batch)
