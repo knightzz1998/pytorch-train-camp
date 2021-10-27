@@ -4,9 +4,10 @@
 # @Email   : 15565946702@163.com
 # @File    : dataloader_demo.py
 # @Software: PyCharm
-
-from torch.utils.data import Dataset, DataLoader
-from torch.utils.data.dataset import T_co
+import numpy as np
+from torch.utils.data import Dataset
+import pandas as pd
+import jieba
 
 """
     torch.utils.data.DataLoader
@@ -29,9 +30,27 @@ from torch.utils.data.dataset import T_co
 
 class WeiBoDataset(Dataset):
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, data_path):
+        self.label, self.data = self.read_data(data_path)
+
+    def __len__(self):
+        """
+            这个必须要设置, getitem中的index就是根据这个来设置的
+        :return:
+        """
+        return len(self.data)
 
     def __getitem__(self, index):
-        pass
+        data = self.data[index]
+        label = self.label[index]
 
+        # 对数据进行一些处理
+        sentences = jieba.cut(data, cut_all=False)
+        data = np.array([word for word in sentences])
+
+        return label, data
+
+    @staticmethod
+    def read_data(data_path):
+        data = pd.read_csv(data_path)
+        return data['label'], data['review']
