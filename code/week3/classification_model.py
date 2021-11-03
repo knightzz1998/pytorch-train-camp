@@ -20,5 +20,3 @@
 """
 
 import torchvision
-
-torchvision.models.AlexNet
